@@ -3,8 +3,15 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+
+// Custom Imports and Assignments
+import apiKey from './config'
+const key = apiKey;
+
 function App() {
   const [count, setCount] = useState(0)
+
+  console.log(key);
 
   return (
     <>

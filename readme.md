@@ -2,6 +2,8 @@
 
 # Gallery
 
+## Devlog
+1. Initialize project: Vite > GitHub > Download base-project files
 
 ## React + Vite
 
