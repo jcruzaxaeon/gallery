@@ -6,6 +6,8 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
+1. "ini Nav, Search":
+   - [ ] [Initialize, Wire] the [Nav, Search]-components
 1. "ini PhotoList":
    - [x] Review target HTML design
    - [x] Wire CSS provided by Team Treehouse
