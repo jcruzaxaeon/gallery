@@ -8,14 +8,15 @@ import './App.css'
 import apiKey from './config'
 const key = apiKey;
 
+import PhotoList from './components/PhotoList';
+
 function App() {
   const [count, setCount] = useState(0)
 
-  console.log(key);
-
   return (
     <>
-      <div>
+      <PhotoList />
+      {/* <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -34,7 +35,7 @@ function App() {
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
-      </p>
+      </p> */}
     </>
   )
 }
