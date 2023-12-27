@@ -1,13 +1,19 @@
 
 
-const Component = () => {
+// "./src/components/Nav.jsx"
+
+function Nav() {
 
   return (
-    <div className='container'>
-
-    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href='#'>Cats</a></li>
+        <li><a href='#'>Dogs</a></li>
+        <li><a href='#'>Computers</a></li>
+      </ul>
+    </nav>
   );
 };
 
-export default Component
+export default Nav
 

@@ -9,12 +9,16 @@ import apiKey from './config'
 const key = apiKey;
 
 import PhotoList from './components/PhotoList';
+import Search from './components/Search';
+import Nav from './components/Nav';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <Search />
+      <Nav />
       <PhotoList />
       {/* <div>
         <a href="https://vitejs.dev" target="_blank">
