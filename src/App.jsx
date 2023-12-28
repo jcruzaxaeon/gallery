@@ -1,6 +1,6 @@
 
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 // [ ] Add "useRoutes" to SKS review AR
 
@@ -11,6 +11,8 @@ const key = apiKey;
 
 import Home from './components/Home.jsx';
 import PhotoList from './components/PhotoList.jsx';
+import Search from './components/Search';
+import Nav from './components/Nav.jsx';
 
 // Globals
 const iniTerms = ['dog', 'cat', 'computer'];
@@ -27,12 +29,17 @@ function App() {
 
   return (
     <>
-      <h1>Word Gallery</h1>
-      <p>Powered by Flickr</p>
+      <h2>Word Gallery</h2>
+      <Search />
+      <Nav />
       <Routes>
         <Route path='/' element={<Home />} />
-        {termRoutes}
+        <Route path='search'>
+          <Route key={"-1"} path=':query' element={<PhotoList />} />
+          {termRoutes}
+        </Route>
       </Routes>
+      <p>Powered by Flickr</p>
     </>
   )
 }

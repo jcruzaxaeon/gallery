@@ -6,6 +6,8 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
+1. [ ] "i search-query route":
+   - Handles user search-queries
 1. "integrate react-router":
    - [x] [Install, integrate] `react-router`
 1. "ini Nav, Search | refactor":

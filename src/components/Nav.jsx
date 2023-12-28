@@ -2,14 +2,16 @@
 
 // "./src/components/Nav.jsx"
 
+import { NavLink } from 'react-router-dom';
+
 function Nav() {
 
   return (
     <nav className="main-nav">
       <ul>
-        <li><a href='#'>Cats</a></li>
-        <li><a href='#'>Dogs</a></li>
-        <li><a href='#'>Computers</a></li>
+        <li><NavLink to='search/dog'>Dog</NavLink></li>
+        <li><NavLink to='search/cat'>Cat</NavLink></li>
+        <li><NavLink to='search/computer'>Computer</NavLink></li>
       </ul>
     </nav>
   );
