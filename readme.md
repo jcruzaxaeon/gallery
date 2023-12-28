@@ -6,7 +6,11 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. [ ] "i search-query route":
+1. [ ] "display images":
+   -
+1. [x] "request flickr data":
+   - Request and log array of image data from Flickr
+1. [x] "i search-query route":
    - Handles user search-queries
 1. "integrate react-router":
    - [x] [Install, integrate] `react-router`
