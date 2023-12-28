@@ -1,45 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
+
+import { useState, useEffect } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom';
+// [ ] Add "useRoutes" to SKS review AR
 
 // Custom Imports and Assignments
+import './App.css'
 import apiKey from './config'
 const key = apiKey;
 
-import PhotoList from './components/PhotoList';
-import Search from './components/Search';
-import Nav from './components/Nav';
+import Home from './components/Home.jsx';
+import PhotoList from './components/PhotoList.jsx';
+
+// Globals
+const iniTerms = ['dog', 'cat', 'computer'];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [terms, setTerms] = useState(iniTerms);
+
+  let termRoutes = terms.map( (term, i) => {
+    return(
+      <Route key={i} path={`${term}`} element={<PhotoList term={term} />} />
+    );
+  });
 
   return (
     <>
-      <Search />
-      <Nav />
-      <PhotoList />
-      {/* <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
+      <h1>Word Gallery</h1>
+      <p>Powered by Flickr</p>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        {termRoutes}
+      </Routes>
     </>
   )
 }

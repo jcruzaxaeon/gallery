@@ -6,8 +6,8 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. "implement react-router":
-   - [ ] [Install, implement] `react-router`
+1. "integrate react-router":
+   - [x] [Install, integrate] `react-router`
 1. "ini Nav, Search | refactor":
    - [x] [Initialize, Wire] the [Nav, Search]-components
    - [x] Refactor Component function-declarations: from arrow to normal declaration-format

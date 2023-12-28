@@ -5,17 +5,16 @@
 // Custom Imports and Assignments
 import Photo from './Photo';
 
-function PhotoList() {
+function PhotoList({term}) {
 
   return (
-    <div class="photo-container">
+    <div className="photo-container">
       <h2>Results</h2>
       <ul>
-        <Photo />
-        <Photo />
-        <Photo />
-        <Photo />
-        
+        <Photo
+          term={term}
+        />
+
         {/* <!-- Not Found --> */}
         {/* <li className="not-found">
           <h3>No Results Found</h3>
