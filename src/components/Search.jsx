@@ -4,6 +4,7 @@
 
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+// useParams for query
 
 function Search() {
   const searchInput = useRef();
@@ -12,12 +13,13 @@ function Search() {
   function handleSubmit(e) {
     e.preventDefault();
     const searchTerm = searchInput.current.value;
-    const path = `search/${searchTerm}`;
+    // setQuery(searchTerm);
+    const path = `search/${searchTerm}`; // only this bit?
     navigate(path);
   }
 
   return (
-    <form className="search-form" onSubmit={handleSubmit}>
+    <form className="search-form" onSubmit={e => handleSubmit(e)}>
       <input type="search" name="search" placeholder="Search" required ref={searchInput} />
       <button type="submit" className="search-button">
         <svg fill="#fff" height="24" viewBox="0 0 23 23" width="24" xmlns="http://www.w3.org/2000/svg">

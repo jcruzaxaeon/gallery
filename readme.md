@@ -6,9 +6,12 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. [ ] "display images":
-   -
-1. [x] "request flickr data":
+1. [ ] "refactor-0"
+   - Prune unecessary code/comments
+   - Move loading/setLoading state and logic into PhotoList
+1. [x] "display images using only url params":
+   - In order for Search and Nav to access the same display logic
+1. [x] "add axios package, request flickr data":
    - Request and log array of image data from Flickr
 1. [x] "i search-query route":
    - Handles user search-queries
