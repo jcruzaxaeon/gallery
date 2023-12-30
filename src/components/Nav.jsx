@@ -4,14 +4,14 @@
 
 import { NavLink } from 'react-router-dom';
 
-function Nav() {
+function Nav({initialTerms}) {
 
   return (
     <nav className="main-nav">
       <ul>
-        <li><NavLink to='search/dog'>Dog</NavLink></li>
-        <li><NavLink to='search/cat'>Cat</NavLink></li>
-        <li><NavLink to='search/computer'>Computer</NavLink></li>
+        <li><NavLink to={`search/${initialTerms[0]}`}>{initialTerms[0]}</NavLink></li>
+        <li><NavLink to={`search/${initialTerms[1]}`}>{initialTerms[1]}</NavLink></li>
+        <li><NavLink to={`search/${initialTerms[2]}`}>{initialTerms[2]}</NavLink></li>
       </ul>
     </nav>
   );

@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom'
 import Photo from './Photo';
 import flickrKey from '../config'
 
-function PhotoList({setLoading}) {
+function PhotoList({ loading, setLoading }) {
 
   // Fetch States
   const [imgData, setImgData] = useState([])
@@ -19,7 +19,6 @@ function PhotoList({setLoading}) {
 
   // Fetching
   useEffect(() => {
-    console.log("useEffect")
     setLoading(true)
     let activeFetch = true
     const flickrUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${flickrKey}&text=${query}&per_page=24&format=json&nojsoncallback=1&safe_search=1`
@@ -30,7 +29,6 @@ function PhotoList({setLoading}) {
         if (activeFetch) {
           setImgData(res.data.photos.photo)
           setLoading(false)
-          console.log('test')
         }
       })
       .catch(err => console.log('Error fetching/parsing data:', err))
@@ -41,9 +39,7 @@ function PhotoList({setLoading}) {
 
   console.log(imgData) // [!BUG] Prints out 3x.  Why?
 
-  console.log("PhotoList:", query);
-
-  let photos = imgData.map( photo => {
+  let photos = imgData.map(photo => {
     let url = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`;
     return (
       <Photo
@@ -55,18 +51,23 @@ function PhotoList({setLoading}) {
   })
 
   return (
-    <div className="photo-container">
-      <h2>Results</h2>
-      <ul>
-        {photos};
+    <>
+    { (loading)
+      ? ( <p>Loading...</p>)
+      : ( <div className="photo-container">
+        <h2>Results</h2>
+        <ul>
+          {photos};
 
-        {/* <!-- Not Found --> */}
-        {/* <li className="not-found">
+          {/* <!-- Not Found --> */}
+          {/* <li className="not-found">
           <h3>No Results Found</h3>
           <p>You search did not return any results. Please try again.</p>
         </li> */}
-      </ul>
-    </div>
+        </ul>
+      </div>
+    )}
+    </>
   );
 };
 
