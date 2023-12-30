@@ -6,7 +6,9 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. [ ] "refactor-0"
+1. [ ] "move fetch to Api"
+   - This version has links setting query-state
+1. [x] "refactor"
    - Prune unecessary code/comments
    - Move loading/setLoading state and logic into PhotoList
 1. [x] "display images using only url params":

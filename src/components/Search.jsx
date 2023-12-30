@@ -6,14 +6,14 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // useParams for query
 
-function Search() {
+function Search({ setQuery }) {
   const searchInput = useRef();
   const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
     const searchTerm = searchInput.current.value;
-    // setQuery(searchTerm);
+    setQuery(searchTerm);
     const path = `search/${searchTerm}`; // only this bit?
     navigate(path);
   }
