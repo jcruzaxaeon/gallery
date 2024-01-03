@@ -6,7 +6,10 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. [ ] "move fetch to Api"
+1. [ ] debug url sync, test jank
+   - This version has janky solutions to a bunch of issues
+   - Used for practice with understanding React render lifecycle
+1. [x] "move fetch to Api"
    - This version has links setting query-state
 1. [x] "refactor"
    - Prune unecessary code/comments
@@ -45,3 +48,6 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## `react-router` Notes
+- Create routes using `createBrowserRouter`

@@ -59,9 +59,16 @@ input {
 }
 
 .main-nav .active,
-.main-nav a:hover,
+/* .main-nav a:hover, */
 .search-form button:hover {
   background-color: #275270;
+}
+
+/* [UPDATE] Deal with "sticky" hover pseudo-class on touch devices */
+@media (hover: hover) {
+  .main-nav a:hover {
+    background-color: #275270;
+  }
 }
 
 .photo-container ul {
@@ -93,7 +100,7 @@ input {
   width: 100%;
 }
 
-@media only screen and (max-width: 767px)  {
+@media only screen and (max-width: 767px) {
   body {
     padding-top: 2em;
   }
@@ -103,7 +110,7 @@ input {
   }
 }
 
-@media only screen and (min-width: 768px)  {
+@media only screen and (min-width: 768px) {
   body {
     padding-top: 4em;
   }
@@ -117,7 +124,7 @@ input {
     display: flex;
     justify-content: center;
   }
-  
+
   .main-nav li {
     margin: 10px;
     width: 100px;
