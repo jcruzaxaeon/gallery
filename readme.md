@@ -6,7 +6,7 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. [ ] debug url sync, test jank
+1. [ ] test jank, debug url sync
    - This version has janky solutions to a bunch of issues
    - Used for practice with understanding React render lifecycle
 1. [x] "move fetch to Api"

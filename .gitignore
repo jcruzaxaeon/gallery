@@ -1,6 +1,9 @@
 # Configuration
 src/config.js
 
+# Useful testing files
+# components/global.js
+
 # Logs
 logs
 *.log

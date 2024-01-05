@@ -64,6 +64,11 @@ input {
   background-color: #275270;
 }
 
+/* [UPDATE] Style loading element */
+.loading {
+  margin: 0 auto;
+}
+
 /* [UPDATE] Deal with "sticky" hover pseudo-class on touch devices */
 @media (hover: hover) {
   .main-nav a:hover {
