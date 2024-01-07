@@ -34,7 +34,7 @@ function PhotoList({ imgData, fetchData, setImgData }) {
   updateCurrentTerm(urlQuery);
 
   useEffect(() => {
-    setImgData({'clearOldData': []});
+    setImgData({ 'clearOldData': [] });
     fetchData(urlQuery);
   }, [urlQuery]);
 
@@ -52,14 +52,14 @@ function PhotoList({ imgData, fetchData, setImgData }) {
       )
     })
   }
-
+  
   if (Object.keys(imgData)[0] === 'errorNoResults') {
     msg = `Found no results for "${urlQuery}".`;
   }
 
   return (
     <div className="photo-container">
-      { (photos.length !== 0)
+      {(photos.length !== 0)
         ? <>
             <h2>Results for:</h2>
             <h3>{`${urlQuery}`}</h3>
@@ -68,7 +68,7 @@ function PhotoList({ imgData, fetchData, setImgData }) {
       }
 
       <ul>
-        { (photos.length !== 0)
+        {(photos.length !== 0)
           ? photos
           : <h2 className='center'>{msg}</h2>
         }

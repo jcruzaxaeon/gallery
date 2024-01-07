@@ -40,7 +40,7 @@ import flickrKey from './config';
 import { getCurrentTerm } from './components/global.js';
 
 // Component Imports
-import Home from './components/Home.jsx';
+// import Home from './components/Home.jsx';
 import PhotoList from './components/PhotoList.jsx';
 import Search from './components/Search';
 import Nav from './components/Nav.jsx';
@@ -50,6 +50,15 @@ import NotFound from './components/NotFound.jsx';
 const initialTerms = ['cliffside', 'sailboat', 'excavator'];
 const testing = false;
 
+// Build the 3 "Static" Routes
+const defaultRoutes = initialTerms.map( (route, i) => {
+  return <Route
+    key={i}
+    path={`default/${route}`}
+    element={ <Navigate to={`search/${route}`} /> }
+  />
+});
+
 /**
  * ## App() - Main function
  * @returns {React.ReactNode} JSX structure for application UI
@@ -58,14 +67,8 @@ function App() {
 
   // General States
   const [query, setQuery] = useState(null);
-  // const [fetching, setFetching] = useState(true);
   const [pause, setPause] = useState(false);
-
   const [imgData, setImgData] = useState({});
-
-  // [ ] [TODO-7t]
-  const [loading, setLoading] = useState(true);
-  const [ini, setIni] = useState(false);
 
   /* 
   Fetching
@@ -98,11 +101,14 @@ function App() {
       axios.get(flickrUrl)
         .then(res => {
           // (!!!) Prevents update when old requests arrive *after* most recent request
-          if(getCurrentTerm() === newQuery) {
+          if (getCurrentTerm() === newQuery) {
             // If recieve no results, set imgData key to "error-message"
-            if(res.data.photos.photo.length === 0) setImgData({'errorNoResults': []});
+            if (res.data.photos.photo.length === 0) {
+              setImgData({ 'errorNoResults': [] });
+              return;
+            }
             // If recieve valid results, set imgData
-            else setImgData({[newQuery]: res.data.photos.photo });
+            setImgData({ [newQuery]: res.data.photos.photo });
           }
         })
         .catch(err => console.log('Error fetching/parsing data:', err))
@@ -126,33 +132,31 @@ function App() {
 
       <Routes location={location}>
         {/* HOME */}
-        <Route path='/' element={<Home />} />
+        <Route
+          path='/'
+          element={ <Navigate to={`search/${initialTerms[0]}`} /> }
+        />
 
         {/* [TEST-POINT] */}
         {/* <Route path="/test" element={test(<Home />)} /> */}
 
-        {(!ini)
-          ? <>
-            {/* DEFAULT ROUTES */}
-            {/* {defaultRoutes} */}
+        {/* DEFAULT ROUTES */}
+        {defaultRoutes}
 
-            {/* SEARCH ROUTE */}
-            <Route
-              path='search/:urlQuery'
-              element={
-                <PhotoList
-                  imgData={imgData}
-                  fetchData={fetchData}
-                  setImgData={setImgData}
-                />
-              }
+        {/* SEARCH ROUTE */}
+        <Route
+          path='search/:urlQuery'
+          element={
+            <PhotoList
+              imgData={imgData}
+              fetchData={fetchData}
+              setImgData={setImgData}
             />
-          </>
-          : <Route path='*' element={<Navigate to='/' />} />
-        }
+          }
+        />
 
-        <Route path='*' element={<NotFound />} />
-      </Routes>
+      <Route path='*' element={<NotFound />} />
+    </Routes >
 
       <p>Powered by Flickr</p>
     </>

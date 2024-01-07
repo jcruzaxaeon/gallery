@@ -1,12 +1,17 @@
 
 
-# Gallery
+# Word Gallery
 
 ## Reference
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. [ ] refactor 01, add exceeds expectations features
+1. [ ] refactor 03, clean-up and comment
+1. [x] refactor 02, add static routes
+   - Add "Static"-Routes (unnecessary for functionality, but added per spec)
+   - refactor 02
+   - check features v. spec
+1. [x] refactor 01, add exceeds expectations features
    - Remove all testing logs
    - Remove unused sync-bug trail-solutions
    - Add exceeds-expectations features
