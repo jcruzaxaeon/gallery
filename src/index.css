@@ -7,7 +7,7 @@ body {
 h2 {
   font-size: 2em;
   margin: 52px 0 40px;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
 }
 
 ul {
@@ -64,17 +64,28 @@ input {
   background-color: #275270;
 }
 
-/* [UPDATE] Style loading element */
-.loading {
-  margin: 0 auto;
+/* 
+## JCruz Custom Section
+>>  START  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+
+h1 { font-size: 3rem; }
+
+.center {
+  margin: 1rem auto;
 }
 
-/* [UPDATE] Deal with "sticky" hover pseudo-class on touch devices */
+.red { color: red }
+
+/* Deal with "sticky" hover pseudo-class on touch devices */
 @media (hover: hover) {
   .main-nav a:hover {
     background-color: #275270;
   }
 }
+
+/* 
+## JCruz Custom Section
+<<  END  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 
 .photo-container ul {
   display: flex;

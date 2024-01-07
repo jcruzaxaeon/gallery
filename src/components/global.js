@@ -2,11 +2,9 @@
 
 // global.js
 
-let lastRequest = '';
+let currentTerm = '';
 
-export const getLastRequest = () => lastRequest;
+export const getCurrentTerm = () => currentTerm;
 
-export function setLastRequest(requestString) {
-  lastRequest=requestString;
-}
+export function updateCurrentTerm(term) { currentTerm=term; }
 

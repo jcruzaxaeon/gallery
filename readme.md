@@ -6,7 +6,12 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
-1. [ ] test jank, debug url sync
+1. [ ] refactor 01, add exceeds expectations features
+   - Remove all testing logs
+   - Remove unused sync-bug trail-solutions
+   - Add exceeds-expectations features
+1. [x] jank i guard clause for unordered responses
+   - "(jank)y-solutions (i)mplement ..."
    - This version has janky solutions to a bunch of issues
    - Used for practice with understanding React render lifecycle
 1. [x] "move fetch to Api"

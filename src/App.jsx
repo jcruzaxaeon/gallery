@@ -2,7 +2,7 @@
 
 /*
 # Word Gallery
-
+- summary: "Team Treehouse Project: Unit 7",
 - filename: "App.jsx",
 - author: {
    - name: "Joel Cruz",
@@ -22,42 +22,45 @@
 ## App.jsx (/)
 --------------------------------------------------------------------------------------------------*/
 
-// External Imports
+// External Imports/Dependencies
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-// [ ] [TODO-7t]
-// [ ] Add "useRoutes" to SKS review AR
 
 // Custom Imports, Assignments
 import './App.css';
 import flickrKey from './config';
-import { getLastRequest, setLastRequest } from './components/global.js';
+
+/*
+### Global Query-Tracker
+- Flag for tracking query-parameter in most recently requested URL
+- Implemented as a custom-import global-variable to avoid UI re-rendering
+- Ensures that displayed response matches current URL
+--------------------------------------------------------------------------------------------------*/
+import { getCurrentTerm } from './components/global.js';
 
 // Component Imports
 import Home from './components/Home.jsx';
 import PhotoList from './components/PhotoList.jsx';
 import Search from './components/Search';
 import Nav from './components/Nav.jsx';
+import NotFound from './components/NotFound.jsx';
 
 // Globals
 const initialTerms = ['cliffside', 'sailboat', 'excavator'];
-const defaultRoutes = [];
+const testing = false;
 
 /**
- * ## App - Main function
+ * ## App() - Main function
  * @returns {React.ReactNode} JSX structure for application UI
  */
 function App() {
 
   // General States
   const [query, setQuery] = useState(null);
-  const [fetching, setFetching] = useState(true);
-  const [calling, setCalling] = useState(false);
-  const [pendingRequest, setPendingRequest] = useState(null);
-  // const [lastRequest, setLastRequest] = useState(null);
+  // const [fetching, setFetching] = useState(true);
+  const [pause, setPause] = useState(false);
 
-  // const [query, setQuery] = useState(initialTerms[0]);
   const [imgData, setImgData] = useState({});
 
   // [ ] [TODO-7t]
@@ -69,76 +72,63 @@ function App() {
   - Fetch data once, when app loads, to display default results
   - Re-fetch when `query` changes > Triggers re-render
   ------------------------------------------------------------------------------------------------*/
-  useEffect( () => { if(query) {
-    console.log('[LOG7]:', "query:", query, "keys:", Object.keys(imgData)[0]);
-    fetchData(query);
-    // if(pendingRequest) {
-    //   setQuery(pendingRequest);
-    //   setPendingRequest(null);
-    // }
-    return () => { setFetching(false); }
-  }}, [query/*, pendingRequest*/]);
-
-
-  // function tryFetchData(newQuery) {
-  //   if(fetching) { setPendingRequest(newQuery); }
-  //   else         { setQuery(newQuery); }
-  // }
+  useEffect(() => {
+    if (query) fetchData(query);
+  }, [query]);
 
   /**
-   *  
-   * 
+   * ## fetchData(newQuery)
+   * @param {string} newQuery - query-term
    */
-  async function fetchData(newQuery) {
+  function fetchData(newQuery) {
 
+    // Sync-Test Code-Block
+    let pauseTime = 0;
+    if (pause) setPause(false); // Toggle delay
+    else setPause(true);
 
-      setFetching(true);
-      setCalling(true);
-      console.log("prefetch, setLastRequest:", getLastRequest() );
-      const flickrUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${flickrKey}&text=${newQuery}&per_page=6&format=json&nojsoncallback=1&safe_search=1`;
+    const flickrUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${flickrKey}&text=${newQuery}&per_page=6&format=json&nojsoncallback=1&safe_search=1`;
 
-      await axios.get(flickrUrl)
+    // Sync-Test Code-Block
+    if (testing) pauseTime = 3000;
+    const delay = pause ? pauseTime : 0;
+
+    setTimeout(() => { // [SYNC-TEST]
+      console.log(pause, delay); // [SYNC-TEST]
+      axios.get(flickrUrl)
         .then(res => {
-          if(fetching) {
-            console.log("infetch:", newQuery);
-            console.log("check last request:", getLastRequest(), "newQuery:", newQuery )
-            if(getLastRequest()===newQuery) {
-              setImgData({ [newQuery]: res.data.photos.photo });
-              console.log("check imgData", imgData);
-            }
-            setCalling(false);
-            // if(pendingRequest) {
-            //   console.log("Fetch pending request");
-            //   fetchData(pendingRequest);
-            //   setPendingRequest(null);
-            // }
+          // (!!!) Prevents update when old requests arrive *after* most recent request
+          if(getCurrentTerm() === newQuery) {
+            // If recieve no results, set imgData key to "error-message"
+            if(res.data.photos.photo.length === 0) setImgData({'errorNoResults': []});
+            // If recieve valid results, set imgData
+            else setImgData({[newQuery]: res.data.photos.photo });
           }
         })
-        .catch(err => console.log('Error fetching/parsing data:', err));
+        .catch(err => console.log('Error fetching/parsing data:', err))
+    }, delay); // [SYNC-TEST]
   }
 
-  // // [TEST01] - Keep for future testing
+  // // [TEST-POINT] - Keep for future testing
   // function test(component) {
   //   console.log("Log values before render here:");
   //   return component;
   // }
 
-
-
-  // JSX Structure
+  // JSX Structure Return
   //------------------------------------------------------------------------------------------------
   return (
     <>
-      <h2>Word Gallery</h2>
+      <h1>Word Gallery</h1>
 
       <Search setQuery={setQuery} />
       <Nav initialTerms={initialTerms} />
 
       <Routes location={location}>
         {/* HOME */}
-        <Route key={location.key} path='/' element={<Home />} />
+        <Route path='/' element={<Home />} />
 
-        {/* [TEST01] */}
+        {/* [TEST-POINT] */}
         {/* <Route path="/test" element={test(<Home />)} /> */}
 
         {(!ini)
@@ -151,11 +141,9 @@ function App() {
               path='search/:urlQuery'
               element={
                 <PhotoList
-                  title={query}
                   imgData={imgData}
-                  setQuery={setQuery}
                   fetchData={fetchData}
-                  setLastRequest={setLastRequest}
+                  setImgData={setImgData}
                 />
               }
             />
@@ -163,25 +151,8 @@ function App() {
           : <Route path='*' element={<Navigate to='/' />} />
         }
 
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
-
-      {/* <> { (loading)
-        ? <p>Loading...</p>
-        : <Routes>
-            <Route path='/' element={<Home />} />
-            {defaultRoutes}
-            <Route
-              path='search/:query'
-              element={
-                <PhotoList
-                  title={"hiking"}
-                  imgData={imgData}
-                />
-              }
-            />
-          </Routes>
-      }</> */}
 
       <p>Powered by Flickr</p>
     </>

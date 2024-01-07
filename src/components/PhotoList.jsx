@@ -3,62 +3,44 @@
 // "./src/components/PhotoList.jsx"
 
 // External Imports
-// import axios from 'axios'
-import { /*useState ,*/ useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
-import { setLastRequest } from './global';
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 
 // Custom Imports and Assignments
 import Photo from './Photo';
+// Global Query Tracker - Custom-import global-variable avoids UI re-rendering
+import { updateCurrentTerm } from './global';
 
-function PhotoList({ title, imgData, setQuery, fetchData }) {
+/**
+ * ## PhotoList( { object, function(string) } )
+ * - imgData `object` : { searchTerm: [array of photo-data] }
+ * - fetchData `function(string)` : Fetch data for `urlQuery`-string from API 
+ * - Attempts to render 2x:
+ *   1. Set Loading Message (before response to data-fetch):
+ *     - Typically, urlQuery != imgData-key > Leave `photos` empty > Set "loading" message ...
+ *       - because urlQuery holds new-term, while imgData holds old-data
+ *     - Else if old-data still matches new-term > Render old `photos`
+ *   2. Render New Photos (after response to data-fetch):
+ *     - imgData-update triggers re-render where urlQuery == imgData-key
+ *     - Build new `photos` > Render `photos`
+ * @param {object} props
+ * @returns {React.ReactNode} JSX structure for PhotoList UI
+ */
+function PhotoList({ imgData, fetchData, setImgData }) {
   const { urlQuery } = useParams();
-  const navigate = useNavigate();
-  console.log("[LOG8.2] - Route Called", urlQuery)
+  let msg = "Loading...";
 
-  setLastRequest(urlQuery);
-  
+  // Set Global-Query Tracker
+  updateCurrentTerm(urlQuery);
+
   useEffect(() => {
-    async function update() {
-      await fetchData(urlQuery);
-    }
-    update();
-    // if(calling &&) { setPendingRequest(urlQuery); }
-    // console.log("in useeffect", urlQuery)
-    // setQuery(urlQuery);
+    setImgData({'clearOldData': []});
+    fetchData(urlQuery);
   }, [urlQuery]);
-  console.log("[LOG4]:", urlQuery, "object:", imgData);
 
-
-  // if (title && imgData) {
-  //   useEffect(() => {
-  //     console.log("[LOG2.9]: set query")
-  //     if(title!==urlQuery)
-  //       setQuery(urlQuery);
-  //   }, [urlQuery])
-  //   console.log("[LOG3]:", urlQuery, `${title}:`, imgData);
-
-  //   // useEffect(()=>{
-  //   //   if(searchQuery && searchQuery!==title) {
-  //   //     fetchData(searchQuery);
-  //   //     console.log("tracking out of sync", imgData);
-  //   //   }
-  //   // }, [searchQuery])
-
-
-  // }
   let photos = [];
-
-  // if (urlQuery !== Object.keys(imgData)[0] && Object.keys(imgData).length!==0) {
-  //   async function update() {
-  //     await fetchData(urlQuery);
-  //   }
-  //   update();
-  // }
-
-  // if(Object.keys(imgData).length!==0) {
   if (urlQuery === Object.keys(imgData)[0]) {
-    console.log("[LOG4.9] imgData", imgData);
+    console.log(imgData);
     photos = imgData[Object.keys(imgData)[0]].map(photo => {
       let url = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`;
       return (
@@ -70,22 +52,26 @@ function PhotoList({ title, imgData, setQuery, fetchData }) {
       )
     })
   }
-  // console.log("[LOG5] photos:", photos);
+
+  if (Object.keys(imgData)[0] === 'errorNoResults') {
+    msg = `Found no results for "${urlQuery}".`;
+  }
 
   return (
     <div className="photo-container">
-      <h2>Results</h2>
-      <h3>{`${urlQuery}`}</h3>
+      { (photos.length !== 0)
+        ? <>
+            <h2>Results for:</h2>
+            <h3>{`${urlQuery}`}</h3>
+          </>
+        : <></>
+      }
+
       <ul>
-        { (photos.length!==0)
+        { (photos.length !== 0)
           ? photos
-          : <h2 className='loading'>Loading...</h2>
+          : <h2 className='center'>{msg}</h2>
         }
-        {/* <!-- Not Found --> */}
-        {/* <li className="not-found">
-          <h3>No Results Found</h3>
-          <p>You search did not return any results. Please try again.</p>
-        </li> */}
       </ul>
     </div>
   )
