@@ -1,21 +1,17 @@
+
+
 /*
-# Word Gallery
-- summary: "Team Treehouse Project: Unit 7",
-- filename: "App.jsx",
-- author: {
-   - name: "Joel Cruz",
-   - email: "jcruz@axaeon.com", }
-- project: {
-   - name: "Word Gallery",
-   - tier: "practice",
-   - type: "unit",
-   - id: "7t",
-   - description: "Project developed independently, for educational purposes, following broad step-by-step specifications provided by Team Treehouse.", }
-- org: {
-   - name: "Team Treehouse",
-   - description: "Online code academy", }
+# Word Gallery - NotFound.jsx
+- author: "Joel Cruz",
+- email: "jcruz@axaeon.com",
+- description: "Project 7: End-of-unit project developed independently, for educational purposes, following broad step-by-step specifications provided by Team Treehouse (Code Academy).",
+- codename: "7t",
 --------------------------------------------------------------------------------------------------*/
 
+/**
+ * ## NotFound Component
+ * @returns {React.ReactNode} JSX element: Displays a 404 error and follow-up instructions
+ */
 function NotFound() {
   return(
     <>

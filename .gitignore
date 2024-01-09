@@ -4,6 +4,9 @@ src/config.js
 # Useful testing files
 # components/global.js
 
+# Unmodified Template Files
+src/_index.css
+
 # Logs
 logs
 *.log

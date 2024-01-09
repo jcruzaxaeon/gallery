@@ -1,13 +1,19 @@
+
+
+/*
+# Word Gallery - index.css
+- author: "Joel Cruz",
+- email: "jcruz@axaeon.com",
+- description: "Project 7: End-of-unit project developed independently, for educational purposes, following broad step-by-step specifications provided by Team Treehouse (Code Academy).",
+- codename: "7t",
+- attribution: "CSS originally provided by Team Treehouse",
+- modifications: "See [CSSMOD] for modifications",
+--------------------------------------------------------------------------------------------------*/
+
 body {
   text-align: center;
   font-family: 'Open Sans', sans-serif;
   color: #3f4850;
-}
-
-h2 {
-  font-size: 2em;
-  margin: 52px 0 40px;
-  /* text-transform: capitalize; */
 }
 
 ul {
@@ -58,17 +64,16 @@ input {
   color: #fff;
 }
 
-.main-nav .active,
-/* .main-nav a:hover, */
-.search-form button:hover {
-  background-color: #275270;
-}
-
-/* 
-## JCruz Custom Section
->>  START  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+/* >>> [CSSMOD] START  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 
 h1 { font-size: 3rem; }
+
+/* Modified from original Team Treehouse version to eliminate capitalization */
+h2 {
+  font-size: 2em;
+  margin: 52px 0 40px;
+  /* text-transform: capitalize; */
+}
 
 .center {
   margin: 1rem auto;
@@ -77,15 +82,19 @@ h1 { font-size: 3rem; }
 .red { color: red }
 
 /* Deal with "sticky" hover pseudo-class on touch devices */
+.main-nav .active,
+/* .main-nav a:hover, */
+.search-form button:hover {
+  background-color: #275270;
+}
+
 @media (hover: hover) {
   .main-nav a:hover {
     background-color: #275270;
   }
 }
 
-/* 
-## JCruz Custom Section
-<<  END  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+/* <<< [CSSMOD] END <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 
 .photo-container ul {
   display: flex;

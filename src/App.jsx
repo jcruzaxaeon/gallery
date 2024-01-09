@@ -1,25 +1,11 @@
 
 
 /*
-# Word Gallery
-- summary: "Team Treehouse Project: Unit 7",
-- filename: "App.jsx",
-- author: {
-   - name: "Joel Cruz",
-   - email: "jcruz@axaeon.com", }
-- project: {
-   - name: "Word Gallery",
-   - tier: "practice",
-   - type: "unit",
-   - id: "7t",
-   - description: "Project developed independently, for educational purposes, following broad step-by-step specifications provided by Team Treehouse.", }
-- org: {
-   - name: "Team Treehouse",
-   - description: "Online code academy", }
---------------------------------------------------------------------------------------------------*/
-
-/*
-## App.jsx (/)
+# Word Gallery - App.jsx
+- author: "Joel Cruz",
+- email: "jcruz@axaeon.com",
+- description: "Project 7: End-of-unit project developed independently, for educational purposes, following broad step-by-step specifications provided by Team Treehouse (Code Academy).",
+- codename: "7t",
 --------------------------------------------------------------------------------------------------*/
 
 // External Imports/Dependencies
@@ -33,14 +19,13 @@ import flickrKey from './config';
 
 /*
 ### Global Query-Tracker
-- Flag for tracking query-parameter in most recently requested URL
+- Flag for tracking query-parameter from most recently requested URL
 - Implemented as a custom-import global-variable to avoid UI re-rendering
 - Ensures that displayed response matches current URL
 --------------------------------------------------------------------------------------------------*/
-import { getCurrentTerm } from './components/global.js';
+import { getCurrentTerm } from './global.js';
 
 // Component Imports
-// import Home from './components/Home.jsx';
 import PhotoList from './components/PhotoList.jsx';
 import Search from './components/Search';
 import Nav from './components/Nav.jsx';
@@ -48,7 +33,7 @@ import NotFound from './components/NotFound.jsx';
 
 // Globals
 const initialTerms = ['cliffside', 'sailboat', 'excavator'];
-const testing = false;
+const testing = false; // [SYNC-TEST]: `true` activates a delay for every other API-request
 
 // Build the 3 "Static" Routes
 const defaultRoutes = initialTerms.map( (route, i) => {
@@ -60,7 +45,9 @@ const defaultRoutes = initialTerms.map( (route, i) => {
 });
 
 /**
- * ## App() - Main function
+ * ## App() - Main
+ * - Main application logic
+ * - Routing
  * @returns {React.ReactNode} JSX structure for application UI
  */
 function App() {
@@ -72,8 +59,6 @@ function App() {
 
   /* 
   Fetching
-  - Fetch data once, when app loads, to display default results
-  - Re-fetch when `query` changes > Triggers re-render
   ------------------------------------------------------------------------------------------------*/
   useEffect(() => {
     if (query) fetchData(query);
@@ -81,23 +66,23 @@ function App() {
 
   /**
    * ## fetchData(newQuery)
-   * @param {string} newQuery - query-term
+   * @param {string} newQuery - query-term used to search for photos on Flickr
    */
   function fetchData(newQuery) {
 
-    // Sync-Test Code-Block
+    // [SYNC-TEST] Code-Block
     let pauseTime = 0;
     if (pause) setPause(false); // Toggle delay
     else setPause(true);
 
     const flickrUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${flickrKey}&text=${newQuery}&per_page=6&format=json&nojsoncallback=1&safe_search=1`;
 
-    // Sync-Test Code-Block
+    // [SYNC-TEST] Code-Block
     if (testing) pauseTime = 3000;
     const delay = pause ? pauseTime : 0;
 
     setTimeout(() => { // [SYNC-TEST]
-      console.log(pause, delay); // [SYNC-TEST]
+     //  console.log(pause, delay); // [SYNC-TEST]
       axios.get(flickrUrl)
         .then(res => {
           // (!!!) Prevents update when old requests arrive *after* most recent request
@@ -115,7 +100,7 @@ function App() {
     }, delay); // [SYNC-TEST]
   }
 
-  // // [TEST-POINT] - Keep for future testing
+  // // [TEST-POINT] - Keep for future testing.  Tests logic just before calling component
   // function test(component) {
   //   console.log("Log values before render here:");
   //   return component;
@@ -131,6 +116,7 @@ function App() {
       <Nav initialTerms={initialTerms} />
 
       <Routes location={location}>
+
         {/* HOME */}
         <Route
           path='/'

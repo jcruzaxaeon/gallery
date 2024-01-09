@@ -1,14 +1,31 @@
 
 
-// "./src/components/Search.jsx"
+/*
+# Word Gallery - Search.jsx
+- author: "Joel Cruz",
+- email: "jcruz@axaeon.com",
+- description: "Project 7: End-of-unit project developed independently, for educational purposes, following broad step-by-step specifications provided by Team Treehouse (Code Academy).",
+- codename: "7t",
+--------------------------------------------------------------------------------------------------*/
 
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+/**
+ * ## Search Component
+ * @returns {React.ReactNode} JSX.Element: Search form
+ */
 function Search() {
   const searchInput = useRef();
   const navigate = useNavigate();
 
+  /**
+   * ## Sumbit Handler
+   * - Extract search-term (term)
+   * - Embed term into a URL path > Navigate to that path (e.g. DOMAIN/search/term)
+   * @param {Event} e - The form submission event
+   */
   function handleSubmit(e) {
     e.preventDefault();
     const searchTerm = searchInput.current.value;
