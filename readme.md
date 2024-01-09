@@ -29,6 +29,8 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
+1. fix global.js filepath in PhotoList
+   - [x] Fix filepath for global.js import in PhotoList
 1. refactor 03, release candidate
    - [x] refactor 03, clean-up and comment
    - [x] Final pass > Comment > Ready as "release-candidate" (rc)

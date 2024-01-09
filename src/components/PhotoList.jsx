@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 // Custom Imports and Assignments
 import Photo from './Photo';
 // Global Query Tracker - Custom-import global-variable avoids UI re-rendering
-import { updateCurrentTerm } from './global';
+import { updateCurrentTerm } from '../global';
 
 /**
  * ## PhotoList Component
