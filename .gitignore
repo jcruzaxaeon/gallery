@@ -6,6 +6,7 @@ src/config.js
 
 # Unmodified Template Files
 src/_index.css
+src/components/Home.jsx
 
 # Logs
 logs

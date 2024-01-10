@@ -30,7 +30,6 @@ import PhotoList from './components/PhotoList.jsx';
 import Search from './components/Search';
 import Nav from './components/Nav.jsx';
 import NotFound from './components/NotFound.jsx';
-import Home from './components/Home.jsx';
 import Loading from './components/Loading.jsx';
 
 // Globals
@@ -39,7 +38,6 @@ const testing = true; // [SYNC-TEST]: `true` activates a delay for every other A
 let defaultRoutes = [];
 let defaultDataBuilder = {};
 let defaultDataReady = false;
-// let fullRoutesReady = true;
 
 /**
  * ## App() - Main
@@ -55,22 +53,16 @@ function App() {
   const [imgData, setImgData] = useState({});
   const [defaultData, setDefaultData] = useState({});
   const [defaultRoutesReady, setDefaultRoutesReady] = useState(false);
+  const [renderRequest, setRenderRequest] = useState(0);
+
 
   /* 
   Fetching
   ------------------------------------------------------------------------------------------------*/
-  
-  // Fetch Data for Static-Routes
-  useEffect(()=>{
-    // defaultRoutes = [];
-    // defaultDataBuilder = {};
-    // defaultDataReady = false;
-    // setQuery('');
-    // setPause(false);
-    // setDefaultData({});
-    // setDefaultRoutesReady(false);
 
-    initialTerms.forEach( term => {
+  // Fetch Data for Static-Routes
+  useEffect(() => {
+    initialTerms.forEach(term => {
       fetchData(term);
     });
   }, []);
@@ -82,38 +74,28 @@ function App() {
     - Decreases modularity
     - Implemented solely to meet project "requirement" to add 3 "static"-routes
   */
-  useEffect(()=>{
-
-    // console.log("Default Data Builder:", defaultDataBuilder);
-    // if (data size <= max) & (data not ready)
-    // - Add defaultData to builder
-    // console.log("Default Data Ready Flag:", defaultDataReady);
-    // if(Object.keys(defaultDataBuilder).length<=initialTerms.length && 
-    //   defaultDataReady===false) {
-    //     // defaultDataBuilder = {...defaultDataBuilder, ...defaultData};
-    //     console.log("Data Builder:", defaultDataBuilder);
-    // }
+  useEffect(() => {
 
     // if (builder size = max) & (data not ready)
     // - Finalize defaultData object image data from all terms
     // - Set non-state data-ready flag = true
-    if(Object.keys(defaultDataBuilder).length===initialTerms.length &&
-      defaultDataReady===false) {
-        setDefaultData(defaultDataBuilder);
-        defaultDataReady = true;
+    if (Object.keys(defaultDataBuilder).length === initialTerms.length &&
+      defaultDataReady === false) {
+      setDefaultData(defaultDataBuilder);
+      defaultDataReady = true;
+      setRenderRequest(prev => prev + 1);
     }
 
     // if (data size = max)
     // - Build default routes
-    if(Object.keys(defaultData).length===initialTerms.length) {
-      console.log("Print NEW default data:", defaultData);
-      defaultRoutes = initialTerms.map( term => {
-        return <Route 
+    if (Object.keys(defaultData).length === initialTerms.length) {
+      defaultRoutes = initialTerms.map(term => {
+        return <Route
           key={term}
           path={term}
           element={
             <PhotoList
-              imgData={ {[term]: defaultData[term]} }
+              imgData={{ [term]: defaultData[term] }}
               fetchData={fetchData}
               setImgData={setImgData}
               title={term}
@@ -124,13 +106,12 @@ function App() {
 
       // if (default data size = max)
       // - Stateful routes-ready flag = true >>> Re-render
-      if(Object.keys(defaultData).length===initialTerms.length) {
+      if (Object.keys(defaultData).length === initialTerms.length) {
         setDefaultRoutesReady(true);
       }
     }
-    console.log("Default Routes:", defaultRoutes);
-  }, [defaultData, defaultRoutesReady]);
-  
+  }, [renderRequest, defaultRoutesReady]);
+
   useEffect(() => {
     if (query) fetchData(query);
   }, [query]);
@@ -140,7 +121,7 @@ function App() {
    * @param {string} newQuery - query-term used to search for photos on Flickr
    */
   function fetchData(newQuery) {
-    console.log("Entered fetch");
+
     // [SYNC-TEST] Code-Block
     let pauseTime = 0;
     if (pause) setPause(false); // Toggle delay
@@ -153,40 +134,43 @@ function App() {
     const delay = pause ? pauseTime : 0;
 
     setTimeout(() => { // [SYNC-TEST]
-     //  console.log(pause, delay); // [SYNC-TEST]
+      //  console.log(pause, delay); // [SYNC-TEST]
       axios.get(flickrUrl)
         .then(res => {
 
           // Default Data Setting
-          if( (newQuery === initialTerms[0] ||
+          if ((
+            newQuery === initialTerms[0] ||
             newQuery === initialTerms[1] ||
             newQuery === initialTerms[2]) &&
-            defaultDataReady===false) {
-              // Runs useEffect() that builds default-data and -routes
-              defaultDataBuilder = {...defaultDataBuilder, ...{[newQuery]: res.data.photos.photo}};
-              setDefaultData({[newQuery]: res.data.photos.photo}); // Can set a counter instead
-              // setDefaultData({...defaultData, ...{[newQuery]: res.data.photos.photo}});
-              console.log("Default Data Set:", {[newQuery]: res.data.photos.photo});
-              console.log("Data builder:", defaultDataBuilder);
+            defaultDataReady === false) {
+
+              // Update data builder
+              defaultDataBuilder = { ...defaultDataBuilder, ...{ [newQuery]: res.data.photos.photo } };
+
+              // Triggers useEffect() that builds default-data and -routes
+              setRenderRequest(prev => prev = prev + 1);
           }
 
-          // (!!!) Prevents update when old requests arrive *after* most recent request
+          // Race Condition Guard
+          // - (!!!) Prevents update when old requests arrive *after* most recent request
           else if (getCurrentTerm() === newQuery) {
-            // If recieve no results, set imgData key to "error-message"
+
+            // (1) NO RESULTS: set imgData key to error-code
             if (res.data.photos.photo.length === 0) {
               setImgData({ 'errorNoResults': [] });
               return;
             }
-            // If recieve valid results, set imgData
-            setImgData({ [newQuery]: res.data.photos.photo });
-            console.log("Setting img data");
+
+            // (2) VALID RESULTS: set imgData
+            setImgData({[newQuery]: res.data.photos.photo});
           }
         })
         .catch(err => console.log('Error fetching/parsing data:', err))
     }, delay); // [SYNC-TEST]
   }
 
-  // // [TEST-POINT] - Keep for future testing.  Tests logic just before calling component
+  // // [TEST-POINT], [KEEP] - Keep for future testing.  Tests logic just before calling component
   // function test(component) {
   //   console.log("Log values before render here:");
   //   return component;
@@ -203,43 +187,32 @@ function App() {
 
       <Routes location={location}>
 
-        {/* HOME */}
+        {/* HOME ROUTE */}
+        {/* ------------------------------------------------------------------------------------ */}
         <Route
           path='/'
-          element={ <Navigate to={`${initialTerms[0]}`} replace={true} /> }
-          // element={
-          //   <Home
-          //     defaultData={defaultData}
-          //     defaultRoutesReady={defaultRoutesReady}
-          //     fetchData={fetchData}
-          //     setImgData={setImgData}
-          //   />
-          // }
+          element={<Navigate to={`${initialTerms[0]}`} replace={true} />}
         />
 
+
         {/* [TEST-POINT] */}
+        {/* ------------------------------------------------------------------------------------ */}
         {/* <Route path="/test" element={test(<Home />)} /> */}
 
+
         {/* DEFAULT ROUTES */}
+        {/* ------------------------------------------------------------------------------------ */}
         { (defaultRoutesReady)
           ? defaultRoutes
           : <>
-              <Route 
-                path='cliffside'
-                element={<Loading />}
-              />
-              <Route 
-                path='sailboat'
-                element={<Loading />}
-              />
-              <Route 
-                path='excavator'
-                element={<Loading />}
-              />
+              <Route path='cliffside' element={<Loading />} />
+              <Route path='sailboat' element={<Loading />} />
+              <Route path='excavator' element={<Loading />} />
             </>
         }
 
         {/* SEARCH ROUTE */}
+        {/* ------------------------------------------------------------------------------------ */}
         <Route
           path='search/:urlQuery'
           element={
@@ -251,10 +224,10 @@ function App() {
           }
         />
 
-      <Route path='*' element={<NotFound />} />
-    </Routes >
+        <Route path='*' element={<NotFound />} />
+      </Routes >
 
-      <p>Powered by Flickr</p>
+      <p>Powered by flickr.com</p>
     </>
   )
 }

@@ -40,13 +40,11 @@ function PhotoList({ imgData, fetchData, setImgData, title }) {
   const { urlQuery } = useParams();
   let liveQuery = urlQuery;
 
-  console.log("imgData:", imgData);
   if(title === 'cliffside' || title === 'sailboat' || title === 'excavator')
     liveQuery=title;
    
   let msg = "Loading...";
 
-  console.log("Live Query:", liveQuery);
   // Set Global-Query Tracker
   updateCurrentTerm(liveQuery);
 
@@ -54,8 +52,6 @@ function PhotoList({ imgData, fetchData, setImgData, title }) {
     setImgData({ 'clearOldData': [] });
     fetchData(urlQuery);
   }, [urlQuery]);
-
-  console.log("live query", liveQuery, "imgData[0]:", Object.keys(imgData)[0]);
 
   // Build List of Photo-Components
   let photos = [];
