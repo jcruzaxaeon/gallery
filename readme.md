@@ -29,6 +29,8 @@
 - TTH: Team Treehouse Online Code-Academy
 
 ## Devlog
+1. (i)mplement 3 static routes for default terms
+   - [ ] Can be handled by `search/:query`-route, but spec requires these 3 routes to execute seperately
 1. fix global.js filepath in PhotoList
    - [x] Fix filepath for global.js import in PhotoList
 1. refactor 03, release candidate

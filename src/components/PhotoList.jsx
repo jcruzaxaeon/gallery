@@ -28,7 +28,7 @@ import { updateCurrentTerm } from '../global';
  * @param {Function} props.setImgData - Function to set image data
  * @returns {React.ReactNode} JSX.Element: Displays a list of photos based on the fetched data
  */
-function PhotoList({ imgData, fetchData, setImgData }) {
+function PhotoList({ imgData, fetchData, setImgData, title }) {
   // Attempts to render 2x:
   // 1. Set Loading Message (before response to data-fetch):
   //    - Typically, urlQuery != imgData-key > Leave `photos` empty > Set "loading" message ...
@@ -38,20 +38,28 @@ function PhotoList({ imgData, fetchData, setImgData }) {
   //    - imgData-update triggers re-render where urlQuery = imgData-key
   //    - Build new `photos` > Render `photos`
   const { urlQuery } = useParams();
+  let liveQuery = urlQuery;
+
+  console.log("imgData:", imgData);
+  if(title === 'cliffside' || title === 'sailboat' || title === 'excavator')
+    liveQuery=title;
+   
   let msg = "Loading...";
 
+  console.log("Live Query:", liveQuery);
   // Set Global-Query Tracker
-  updateCurrentTerm(urlQuery);
+  updateCurrentTerm(liveQuery);
 
   useEffect(() => {
     setImgData({ 'clearOldData': [] });
     fetchData(urlQuery);
   }, [urlQuery]);
 
+  console.log("live query", liveQuery, "imgData[0]:", Object.keys(imgData)[0]);
+
   // Build List of Photo-Components
   let photos = [];
-  if (urlQuery === Object.keys(imgData)[0]) {
-    console.log(imgData);
+  if (liveQuery === Object.keys(imgData)[0] && Object.keys(imgData).length!==0) { //urlQuery
     photos = imgData[Object.keys(imgData)[0]].map(photo => {
       let url = `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`;
       return (
@@ -75,7 +83,7 @@ function PhotoList({ imgData, fetchData, setImgData }) {
       {(photos.length !== 0)
         ? <>
             <h2>Results for:</h2>
-            <h3>{`${urlQuery}`}</h3>
+            <h3>{`${liveQuery}`}</h3>
           </>
         : <></>
       }

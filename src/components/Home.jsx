@@ -11,6 +11,9 @@
 // External Imports
 import React from "react";
 
+import Loading from './Loading';
+import PhotoList from "./PhotoList";
+
 /**
  * ## Home Component
  * - Component is not needed
@@ -18,8 +21,23 @@ import React from "react";
  * - Keeping Search, and Nav in App for readability
  * @returns {React.ReactNode} Empty JSX element 
  */
-function Home() {
-  return(<></>);
+function Home({ defaultData, defaultRoutesReady, fetchData, setImgData }) {
+  return(
+    <>
+      {(!defaultRoutesReady)
+        ? <Loading />
+        : <PhotoList
+            imgData={ {cliffside: defaultData['cliffside']} }
+            fetchData={fetchData}
+            setImgData={setImgData}
+            title={'cliffside'}
+          />
+        // : <h3 className='center'>
+        //     Please enter a search term, or click on an option above.
+        //   </h3>
+      }
+    </>
+  );
 }
 
 export default Home;

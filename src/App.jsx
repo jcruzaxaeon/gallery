@@ -30,19 +30,16 @@ import PhotoList from './components/PhotoList.jsx';
 import Search from './components/Search';
 import Nav from './components/Nav.jsx';
 import NotFound from './components/NotFound.jsx';
+import Home from './components/Home.jsx';
+import Loading from './components/Loading.jsx';
 
 // Globals
 const initialTerms = ['cliffside', 'sailboat', 'excavator'];
-const testing = false; // [SYNC-TEST]: `true` activates a delay for every other API-request
-
-// Build the 3 "Static" Routes
-const defaultRoutes = initialTerms.map( (route, i) => {
-  return <Route
-    key={i}
-    path={`default/${route}`}
-    element={ <Navigate to={`search/${route}`} /> }
-  />
-});
+const testing = true; // [SYNC-TEST]: `true` activates a delay for every other API-request
+let defaultRoutes = [];
+let defaultDataBuilder = {};
+let defaultDataReady = false;
+// let fullRoutesReady = true;
 
 /**
  * ## App() - Main
@@ -56,10 +53,84 @@ function App() {
   const [query, setQuery] = useState(null);
   const [pause, setPause] = useState(false);
   const [imgData, setImgData] = useState({});
+  const [defaultData, setDefaultData] = useState({});
+  const [defaultRoutesReady, setDefaultRoutesReady] = useState(false);
 
   /* 
   Fetching
   ------------------------------------------------------------------------------------------------*/
+  
+  // Fetch Data for Static-Routes
+  useEffect(()=>{
+    // defaultRoutes = [];
+    // defaultDataBuilder = {};
+    // defaultDataReady = false;
+    // setQuery('');
+    // setPause(false);
+    // setDefaultData({});
+    // setDefaultRoutesReady(false);
+
+    initialTerms.forEach( term => {
+      fetchData(term);
+    });
+  }, []);
+
+  /* 
+  ### Build Default Data and Routes
+  - This useEffect():
+    - Increases complexity
+    - Decreases modularity
+    - Implemented solely to meet project "requirement" to add 3 "static"-routes
+  */
+  useEffect(()=>{
+
+    // console.log("Default Data Builder:", defaultDataBuilder);
+    // if (data size <= max) & (data not ready)
+    // - Add defaultData to builder
+    // console.log("Default Data Ready Flag:", defaultDataReady);
+    // if(Object.keys(defaultDataBuilder).length<=initialTerms.length && 
+    //   defaultDataReady===false) {
+    //     // defaultDataBuilder = {...defaultDataBuilder, ...defaultData};
+    //     console.log("Data Builder:", defaultDataBuilder);
+    // }
+
+    // if (builder size = max) & (data not ready)
+    // - Finalize defaultData object image data from all terms
+    // - Set non-state data-ready flag = true
+    if(Object.keys(defaultDataBuilder).length===initialTerms.length &&
+      defaultDataReady===false) {
+        setDefaultData(defaultDataBuilder);
+        defaultDataReady = true;
+    }
+
+    // if (data size = max)
+    // - Build default routes
+    if(Object.keys(defaultData).length===initialTerms.length) {
+      console.log("Print NEW default data:", defaultData);
+      defaultRoutes = initialTerms.map( term => {
+        return <Route 
+          key={term}
+          path={term}
+          element={
+            <PhotoList
+              imgData={ {[term]: defaultData[term]} }
+              fetchData={fetchData}
+              setImgData={setImgData}
+              title={term}
+            />
+          }
+        />
+      });
+
+      // if (default data size = max)
+      // - Stateful routes-ready flag = true >>> Re-render
+      if(Object.keys(defaultData).length===initialTerms.length) {
+        setDefaultRoutesReady(true);
+      }
+    }
+    console.log("Default Routes:", defaultRoutes);
+  }, [defaultData, defaultRoutesReady]);
+  
   useEffect(() => {
     if (query) fetchData(query);
   }, [query]);
@@ -69,7 +140,7 @@ function App() {
    * @param {string} newQuery - query-term used to search for photos on Flickr
    */
   function fetchData(newQuery) {
-
+    console.log("Entered fetch");
     // [SYNC-TEST] Code-Block
     let pauseTime = 0;
     if (pause) setPause(false); // Toggle delay
@@ -85,8 +156,22 @@ function App() {
      //  console.log(pause, delay); // [SYNC-TEST]
       axios.get(flickrUrl)
         .then(res => {
+
+          // Default Data Setting
+          if( (newQuery === initialTerms[0] ||
+            newQuery === initialTerms[1] ||
+            newQuery === initialTerms[2]) &&
+            defaultDataReady===false) {
+              // Runs useEffect() that builds default-data and -routes
+              defaultDataBuilder = {...defaultDataBuilder, ...{[newQuery]: res.data.photos.photo}};
+              setDefaultData({[newQuery]: res.data.photos.photo}); // Can set a counter instead
+              // setDefaultData({...defaultData, ...{[newQuery]: res.data.photos.photo}});
+              console.log("Default Data Set:", {[newQuery]: res.data.photos.photo});
+              console.log("Data builder:", defaultDataBuilder);
+          }
+
           // (!!!) Prevents update when old requests arrive *after* most recent request
-          if (getCurrentTerm() === newQuery) {
+          else if (getCurrentTerm() === newQuery) {
             // If recieve no results, set imgData key to "error-message"
             if (res.data.photos.photo.length === 0) {
               setImgData({ 'errorNoResults': [] });
@@ -94,6 +179,7 @@ function App() {
             }
             // If recieve valid results, set imgData
             setImgData({ [newQuery]: res.data.photos.photo });
+            console.log("Setting img data");
           }
         })
         .catch(err => console.log('Error fetching/parsing data:', err))
@@ -120,14 +206,38 @@ function App() {
         {/* HOME */}
         <Route
           path='/'
-          element={ <Navigate to={`search/${initialTerms[0]}`} /> }
+          element={ <Navigate to={`${initialTerms[0]}`} replace={true} /> }
+          // element={
+          //   <Home
+          //     defaultData={defaultData}
+          //     defaultRoutesReady={defaultRoutesReady}
+          //     fetchData={fetchData}
+          //     setImgData={setImgData}
+          //   />
+          // }
         />
 
         {/* [TEST-POINT] */}
         {/* <Route path="/test" element={test(<Home />)} /> */}
 
         {/* DEFAULT ROUTES */}
-        {defaultRoutes}
+        { (defaultRoutesReady)
+          ? defaultRoutes
+          : <>
+              <Route 
+                path='cliffside'
+                element={<Loading />}
+              />
+              <Route 
+                path='sailboat'
+                element={<Loading />}
+              />
+              <Route 
+                path='excavator'
+                element={<Loading />}
+              />
+            </>
+        }
 
         {/* SEARCH ROUTE */}
         <Route

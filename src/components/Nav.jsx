@@ -27,9 +27,9 @@ function Nav({ initialTerms }) {
   return (
     <nav className="main-nav">
       <ul>
-        <li><NavLink to={`search/${t0}`}>{t0}</NavLink></li>
-        <li><NavLink to={`search/${t1}`}>{t1}</NavLink></li>
-        <li><NavLink to={`search/${t2}`}>{t2}</NavLink></li>
+        <li><NavLink to={`${t0}`}>{t0}</NavLink></li>
+        <li><NavLink to={`${t1}`}>{t1}</NavLink></li>
+        <li><NavLink to={`${t2}`}>{t2}</NavLink></li>
       </ul>
     </nav>
   );
